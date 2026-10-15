@@ -6,7 +6,7 @@ public class CommonConfig {
     private String fileName;
     private long fileSize;
     private int pieceSize;
-
+    
     public CommonConfig(int numberOfPreferredNeighbors, int unchokingInterval, int optimisticUnchokingInterval, String fileName, long fileSize, int pieceSize) {
         if (numberOfPreferredNeighbors < 0 || unchokingInterval <= 0 || optimisticUnchokingInterval <= 0 || fileName == null || fileName.isEmpty() || fileSize <= 0 || pieceSize <= 0) {
             throw new IllegalArgumentException("Invalid configuration values");

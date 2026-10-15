@@ -2,6 +2,7 @@
 *.class
 *.jar
 out/
+target/
 
 # Editors
 .vscode/

@@ -3,40 +3,34 @@ import java.io.*;
 import java.util.*;
 
 public class peerProcess {
-
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: java peerProcess <peerID>");
             return;
         }
-
         try {
             int peerId = Integer.parseInt(args[0]);
-
             CommonConfig commonConfig =
                     ConfigurationLoader.loadCommonConfig("Common.cfg");
-
             List<PeerInfo> allPeers =
                     ConfigurationLoader.loadPeers("PeerInfo.cfg");
-
             PeerInfo currentPeer =
                     ConfigurationLoader.findPeer(allPeers, peerId);
-
             if (currentPeer == null) {
                 System.err.println("Peer ID not found: " + peerId);
                 return;
             }
-
-            ConnectionManager connectionManager =
-                    new ConnectionManager(currentPeer, allPeers);
-
+            PeerLogger logger = new PeerLogger(peerId);
+            logger.logStartup(currentPeer.getPort());
+            logger.logPeerCount(allPeers.size());
+            logger.logPeerInfo(currentPeer);
+            logger.logFileInfo(commonConfig);
+            ConnectionManager connectionManager = new ConnectionManager(currentPeer, allPeers, logger);
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 connectionManager.stop();
             }));
-
             System.out.println("Starting peer " + peerId);
             connectionManager.start();
-
         } catch (NumberFormatException e) {
             System.err.println("Peer ID must be an integer.");
         }
