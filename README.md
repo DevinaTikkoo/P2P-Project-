@@ -6,6 +6,8 @@
 
 **Group Members:** Devina Tikkoo, Priyanka Jain
 
+**GitHub Repo: [github.com/DevinaTikkoo/P2P-Project-](https://github.com/DevinaTikkoo/P2P-Project-)**
+
 ## Project Overview
 
 This project is a peer-to-peer file-sharing application written in Java, following a simplified BitTorrent protocol. The goal is to allow multiple peers to connect over TCP and exchange file pieces until every peer has the complete file.

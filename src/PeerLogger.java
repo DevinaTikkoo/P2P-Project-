@@ -1,18 +1,22 @@
-
-import java.io.*;
-import java.time.*;
-import java.time.format.*;
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 public class PeerLogger {
     private final int currentPeerId;
     private final PrintWriter writer;
     private final DateTimeFormatter formatter;
+    private boolean closed;
     public PeerLogger(int currentPeerId) throws IOException {
         this.currentPeerId = currentPeerId;
         this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.writer = new PrintWriter(new FileWriter("log_peer_" + currentPeerId + ".log", true));
     }
     public synchronized void log(String message) {
+        if (closed) {
+            return;
+        }
         String timestamp = LocalDateTime.now().format(formatter);
         String entry = "[" + timestamp + "]: " + message;
         writer.println(entry);
@@ -78,7 +82,11 @@ public class PeerLogger {
         }
     }
     public synchronized void close() {
-        writer.flush();
-        writer.close();
+        if (!closed) {
+            try (writer) {
+                writer.flush();
+            }
+            closed = true;
+        }
     }
 }
